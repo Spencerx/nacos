@@ -31,9 +31,7 @@
 
     <!-- MS_SHOULD_BE_FINAL: 7 occurrences, static field should be final -->
     <Match><Bug pattern="MS_SHOULD_BE_FINAL"/></Match>
-    <!-- HE_EQUALS_USE_HASHCODE: 3 occurrences, equals without hashCode -->
-    <Match><Bug pattern="HE_EQUALS_USE_HASHCODE"/></Match>
-    <!-- DMI_BLOCKING_METHODS_ON_URL: 2 occurrences, URL.equals/hashCode triggers DNS -->
+<!-- DMI_BLOCKING_METHODS_ON_URL: 2 occurrences, URL.equals/hashCode triggers DNS -->
     <Match><Bug pattern="DMI_BLOCKING_METHODS_ON_URL"/></Match>
     <!-- RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED: 2 occurrences, concurrency risk -->
     <Match><Bug pattern="RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED"/></Match>

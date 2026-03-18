@@ -17,9 +17,13 @@
 package com.alibaba.nacos.ai.controller;
 
 import com.alibaba.nacos.ai.constant.Constants;
-import com.alibaba.nacos.ai.form.skills.admin.SkillDetailForm;
+import com.alibaba.nacos.ai.form.skills.admin.SkillDraftCreateForm;
 import com.alibaba.nacos.ai.form.skills.admin.SkillForm;
+import com.alibaba.nacos.ai.form.skills.admin.SkillLabelsUpdateForm;
 import com.alibaba.nacos.ai.form.skills.admin.SkillListForm;
+import com.alibaba.nacos.ai.form.skills.admin.SkillOnlineForm;
+import com.alibaba.nacos.ai.form.skills.admin.SkillPublishForm;
+import com.alibaba.nacos.ai.form.skills.admin.SkillSubmitForm;
 import com.alibaba.nacos.ai.form.skills.admin.SkillUpdateForm;
 import com.alibaba.nacos.ai.param.SkillHttpParamExtractor;
 import com.alibaba.nacos.ai.service.skills.SkillOperationService;
@@ -31,6 +35,7 @@ import com.alibaba.nacos.api.annotation.NacosApi;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.model.Page;
 import com.alibaba.nacos.api.model.v2.Result;
+import com.alibaba.nacos.common.utils.JacksonUtils;
 import com.alibaba.nacos.auth.annotation.Secured;
 import com.alibaba.nacos.core.model.form.PageForm;
 import com.alibaba.nacos.core.paramcheck.ExtractorManager;
@@ -46,6 +51,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Skill admin controller.
@@ -65,22 +71,6 @@ public class SkillAdminController {
     }
     
     /**
-     * Register skill.
-     *
-     * @param form the skill detail form to register
-     * @return result of the registration operation
-     * @throws NacosException if the skill registration fails
-     */
-    @PostMapping
-    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
-    public Result<String> registerSkill(SkillDetailForm form) throws NacosException {
-        form.validate();
-        Skill skill = SkillRequestUtil.parseSkill(form);
-        String skillName = skillOperationService.registerSkill(skill, form.getNamespaceId());
-        return Result.success(skillName);
-    }
-    
-    /**
      * Get skill.
      *
      * @param form the skill form to get
@@ -93,22 +83,6 @@ public class SkillAdminController {
         form.validate();
         return Result.success(
                 skillOperationService.getSkillDetail(form.getNamespaceId(), form.getSkillName()));
-    }
-    
-    /**
-     * Update skill.
-     *
-     * @param form the skill update form to update
-     * @return result of the update operation
-     * @throws NacosException if the skill update fails
-     */
-    @PutMapping
-    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
-    public Result<String> updateSkill(SkillUpdateForm form) throws NacosException {
-        form.validate();
-        Skill skill = SkillRequestUtil.parseSkill(form);
-        skillOperationService.updateSkill(skill, form.getNamespaceId());
-        return Result.success("ok");
     }
     
     /**
@@ -164,5 +138,96 @@ public class SkillAdminController {
         byte[] zipBytes = SkillRequestUtil.validateAndExtractZipBytes(file);
         String skillName = skillOperationService.uploadSkillFromZip(namespaceId, zipBytes);
         return Result.success(skillName);
+    }
+
+    /**
+     * Create draft version.
+     */
+    @PostMapping("/draft")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> createDraft(SkillDraftCreateForm form) throws NacosException {
+        form.validate();
+        String v = skillOperationService.createDraft(form.getNamespaceId(), form.getSkillName(), form.getBasedOnVersion());
+        return Result.success(v);
+    }
+
+    /**
+     * Update current draft content.
+     */
+    @PutMapping("/draft")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> updateDraft(SkillUpdateForm form) throws NacosException {
+        form.validate();
+        Skill skill = SkillRequestUtil.parseSkill(form);
+        skillOperationService.updateDraft(form.getNamespaceId(), skill);
+        return Result.success("ok");
+    }
+
+    /**
+     * Delete current draft version.
+     */
+    @DeleteMapping("/draft")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> deleteDraft(SkillForm form) throws NacosException {
+        form.validate();
+        skillOperationService.deleteDraft(form.getNamespaceId(), form.getSkillName());
+        return Result.success("ok");
+    }
+
+    /**
+     * Submit a version for pipeline review.
+     */
+    @PostMapping("/submit")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> submit(SkillSubmitForm form) throws NacosException {
+        form.validate();
+        String result = skillOperationService.submit(form.getNamespaceId(), form.getSkillName(), form.getVersion());
+        return Result.success(result);
+    }
+
+    /**
+     * Publish an approved reviewing version.
+     */
+    @PostMapping("/publish")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> publish(SkillPublishForm form) throws NacosException {
+        form.validate();
+        boolean updateLatest = form.getUpdateLatestLabel() == null || form.getUpdateLatestLabel();
+        skillOperationService.publish(form.getNamespaceId(), form.getSkillName(), form.getVersion(), updateLatest);
+        return Result.success("ok");
+    }
+
+    /**
+     * Update runtime route labels without changing version status.
+     */
+    @PutMapping("/labels")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> updateLabels(SkillLabelsUpdateForm form) throws NacosException {
+        form.validate();
+        Map<String, String> labels = JacksonUtils.toObj(form.getLabels(), Map.class);
+        skillOperationService.updateLabels(form.getNamespaceId(), form.getSkillName(), labels);
+        return Result.success("ok");
+    }
+
+    /**
+     * Online operation (version-level or skill-level by scope).
+     */
+    @PostMapping("/online")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> online(SkillOnlineForm form) throws NacosException {
+        form.validate();
+        skillOperationService.changeOnlineStatus(form.getNamespaceId(), form.getSkillName(), form.getScope(), form.getVersion(), true);
+        return Result.success("ok");
+    }
+
+    /**
+     * Offline operation (version-level or skill-level by scope).
+     */
+    @PostMapping("/offline")
+    @Secured(action = ActionTypes.WRITE, signType = SignType.AI, apiType = ApiType.ADMIN_API)
+    public Result<String> offline(SkillOnlineForm form) throws NacosException {
+        form.validate();
+        skillOperationService.changeOnlineStatus(form.getNamespaceId(), form.getSkillName(), form.getScope(), form.getVersion(), false);
+        return Result.success("ok");
     }
 }

@@ -20,7 +20,7 @@ import com.alibaba.nacos.common.utils.StringUtils;
 import com.alibaba.nacos.plugin.datasource.constants.DatabaseTypeConstant;
 import com.alibaba.nacos.plugin.datasource.constants.FieldConstant;
 import com.alibaba.nacos.plugin.datasource.impl.enums.postgresql.TrustedPostgresqlFunctionEnum;
-import com.alibaba.nacos.plugin.datasource.impl.mysql.AbstractMapperByMysql;
+import com.alibaba.nacos.plugin.datasource.mapper.AbstractMapper;
 import com.alibaba.nacos.plugin.datasource.mapper.AiResourceMapper;
 import com.alibaba.nacos.plugin.datasource.mapper.ext.WhereBuilder;
 import com.alibaba.nacos.plugin.datasource.model.MapperContext;
@@ -31,7 +31,7 @@ import com.alibaba.nacos.plugin.datasource.model.MapperResult;
  *
  * @author nacos
  */
-public class AiResourceMapperByPostgresql extends AbstractMapperByMysql implements AiResourceMapper {
+public class AiResourceMapperByPostgresql extends AbstractMapper implements AiResourceMapper {
 
     @Override
     public MapperResult findAiResourceFetchRows(MapperContext context) {

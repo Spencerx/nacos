@@ -111,7 +111,7 @@ public class SkillOperationServiceImpl implements SkillOperationService {
 
     private static final String VERSION_STATUS_ONLINE = "online";
 
-    private static final String DEFAULT_AUTHOR = "nacos";
+    private static final String DEFAULT_AUTHOR = "-";
 
     private static final String VERSION_STATUS_DRAFT = "draft";
 

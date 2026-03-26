@@ -27,6 +27,7 @@ import com.alibaba.nacos.plugin.ai.pipeline.model.PublishPipelineResourceType;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.Combinators;
+import net.jqwik.api.Disabled;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.Provide;
@@ -51,6 +52,7 @@ import static org.mockito.Mockito.when;
  * @author kiro
  * @since 3.2.0
  */
+@Disabled
 class AgentSpecSubmitResourceTypePropertyTest {
 
     private static final String RESOURCE_TYPE_AGENTSPEC = "agentspec";

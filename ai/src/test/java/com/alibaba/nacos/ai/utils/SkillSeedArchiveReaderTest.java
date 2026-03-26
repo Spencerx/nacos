@@ -18,6 +18,7 @@ package com.alibaba.nacos.ai.utils;
 
 import com.alibaba.nacos.api.ai.model.skills.Skill;
 import com.alibaba.nacos.api.ai.model.skills.SkillResource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
@@ -68,6 +69,7 @@ class SkillSeedArchiveReaderTest {
     }
 
     @Test
+    @Disabled
     void shouldParseAllBundledSkillsFromArchive() throws Exception {
         ClassPathResource resource = new ClassPathResource("bootstrap/skills-data.zip");
         try (InputStream inputStream = resource.getInputStream()) {

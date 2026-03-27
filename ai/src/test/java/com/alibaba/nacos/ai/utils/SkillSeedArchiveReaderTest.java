@@ -18,8 +18,8 @@ package com.alibaba.nacos.ai.utils;
 
 import com.alibaba.nacos.api.ai.model.skills.Skill;
 import com.alibaba.nacos.api.ai.model.skills.SkillResource;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.ByteArrayInputStream;
@@ -79,9 +79,9 @@ class SkillSeedArchiveReaderTest {
     }
 
     @Test
-    @Disabled
     void shouldParseAllBundledSkillsFromArchive() throws Exception {
         ClassPathResource resource = new ClassPathResource("bootstrap/skills-data.zip");
+        Assumptions.assumeTrue(resource.exists(), "bootstrap/skills-data.zip is not bundled in this test runtime");
         try (InputStream inputStream = resource.getInputStream()) {
             List<SkillSeedArchiveReader.SkillPackage> actual = SkillSeedArchiveReader.read(inputStream);
 

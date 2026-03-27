@@ -17,8 +17,8 @@
 package com.alibaba.nacos.ai.utils;
 
 import com.alibaba.nacos.api.ai.model.agentspecs.AgentSpec;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.ByteArrayInputStream;
@@ -85,9 +85,9 @@ class AgentSpecSeedArchiveReaderTest {
     }
 
     @Test
-    @Disabled
     void shouldParseBundledAgentspecArchive() throws Exception {
         ClassPathResource resource = new ClassPathResource("bootstrap/agentspec-data.zip");
+        Assumptions.assumeTrue(resource.exists(), "bootstrap/agentspec-data.zip is not bundled in this test runtime");
         try (InputStream inputStream = resource.getInputStream()) {
             List<AgentSpecSeedArchiveReader.AgentSpecPackage> actual = AgentSpecSeedArchiveReader.read(inputStream);
 

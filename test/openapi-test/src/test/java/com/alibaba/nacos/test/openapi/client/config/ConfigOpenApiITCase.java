@@ -42,6 +42,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -120,11 +121,20 @@ public class ConfigOpenApiITCase {
         String content = "hello-openapi-it-" + UUID.randomUUID();
         try {
             assertTrue(publishConfig(dataId, TEST_GROUP, "", content));
-            HttpRestResult<String> httpResult = getConfig(dataId, TEST_GROUP, DEFAULT_NAMESPACE);
-            assertTrue(httpResult.ok());
-            Result<ConfigQueryResponse> actual = JacksonUtils.toObj(httpResult.getData(), new TypeReference<>() {
-            });
-            assertEquals(ErrorCode.SUCCESS.getCode(), actual.getCode());
+            Result<ConfigQueryResponse> actual = null;
+            int retryTime = 10;
+            while (retryTime-- > 0) {
+                HttpRestResult<String> httpResult = getConfig(dataId, TEST_GROUP, DEFAULT_NAMESPACE);
+                assertTrue(httpResult.ok());
+                actual = JacksonUtils.toObj(httpResult.getData(), new TypeReference<>() {
+                });
+                if (ErrorCode.SUCCESS.getCode().equals(actual.getCode())) {
+                    break;
+                }
+                // After publish success, nacos will async cache into disk from storage.
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+            assertEquals(ErrorCode.SUCCESS.getCode(), actual.getCode(), "Expected success after retry, but not still failed.");
             assertNotNull(actual.getData());
             assertEquals(content, actual.getData().getContent());
             assertEquals(MD5Utils.md5Hex(content, StandardCharsets.UTF_8.name()), actual.getData().getMd5());
@@ -143,11 +153,20 @@ public class ConfigOpenApiITCase {
             assertTrue(publishConfig(dataId, TEST_GROUP, "", content));
             String url = BASE_URL + CLIENT_CONFIG_PATH;
             Query query = Query.newInstance().addParam("dataId", dataId).addParam("groupName", TEST_GROUP);
-            HttpRestResult<String> httpResult = nacosRestTemplate.get(url, Header.EMPTY, query, String.class);
-            assertTrue(httpResult.ok());
-            Result<ConfigQueryResponse> actual = JacksonUtils.toObj(httpResult.getData(), new TypeReference<>() {
-            });
-            assertEquals(ErrorCode.SUCCESS.getCode(), actual.getCode());
+            Result<ConfigQueryResponse> actual = null;
+            int retryTime = 10;
+            while (retryTime-- > 0) {
+                HttpRestResult<String> httpResult = nacosRestTemplate.get(url, Header.EMPTY, query, String.class);
+                assertTrue(httpResult.ok());
+                actual = JacksonUtils.toObj(httpResult.getData(), new TypeReference<>() {
+                });
+                if (ErrorCode.SUCCESS.getCode().equals(actual.getCode())) {
+                    break;
+                }
+                // After publish success, nacos will async cache into disk from storage.
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+            assertEquals(ErrorCode.SUCCESS.getCode(), actual.getCode(), "Expected success after retry, but not still failed.");
             assertEquals(content, actual.getData().getContent());
         } finally {
             deleteConfig(dataId, TEST_GROUP, "");

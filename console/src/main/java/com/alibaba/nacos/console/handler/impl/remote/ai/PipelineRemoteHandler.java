@@ -20,6 +20,7 @@ import com.alibaba.nacos.ai.pipeline.model.PipelineExecution;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.model.Page;
 import com.alibaba.nacos.common.utils.JacksonUtils;
+import com.alibaba.nacos.console.handler.ai.EnabledAiHandler;
 import com.alibaba.nacos.console.handler.ai.PipelineHandler;
 import com.alibaba.nacos.console.handler.impl.ConditionFunctionEnabled;
 import com.alibaba.nacos.console.handler.impl.remote.EnabledRemoteHandler;
@@ -39,6 +40,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @EnabledRemoteHandler
+@EnabledAiHandler
 @Conditional(ConditionFunctionEnabled.ConditionAiEnabled.class)
 public class PipelineRemoteHandler implements PipelineHandler {
     

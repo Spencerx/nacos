@@ -32,6 +32,7 @@ import com.alibaba.nacos.api.ai.model.agentspecs.AgentSpecMeta;
 import com.alibaba.nacos.api.ai.model.agentspecs.AgentSpecSummary;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.model.Page;
+import com.alibaba.nacos.console.handler.ai.EnabledAiHandler;
 import com.alibaba.nacos.console.handler.ai.AgentSpecHandler;
 import com.alibaba.nacos.console.handler.impl.ConditionFunctionEnabled;
 import com.alibaba.nacos.console.handler.impl.remote.EnabledRemoteHandler;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
  */
 @Service
 @EnabledRemoteHandler
+@EnabledAiHandler
 @Conditional(ConditionFunctionEnabled.ConditionAiEnabled.class)
 public class AgentSpecRemoteHandler implements AgentSpecHandler {
     

@@ -6,6 +6,21 @@ import { useAuthStore } from '@/stores';
 import { useServerStore } from '@/stores/server-store';
 import { AlertTriangle } from 'lucide-react';
 
+export function getDefaultRoute(aiEnabled: boolean, functionMode: string) {
+  const configAvailable = functionMode !== 'naming';
+  const namingAvailable = functionMode !== 'config';
+  if (aiEnabled && configAvailable && namingAvailable) {
+    return '/skill';
+  }
+  if (configAvailable) {
+    return '/configurationManagement';
+  }
+  if (namingAvailable) {
+    return '/serviceManagement';
+  }
+  return '/namespace';
+}
+
 /**
  * ConsoleDisabledPage - Shown when nacos.console.ui.enabled=false
  */
@@ -63,6 +78,29 @@ export function AuthGuard() {
 
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
+}
+
+/**
+ * AiGuard - Protects AI console routes when nacos.extension.ai.enabled=false
+ */
+export function AiGuard() {
+  const { aiEnabled, functionMode, stateLoaded, fetchState } = useServerStore();
+
+  useEffect(() => {
+    if (!stateLoaded) {
+      fetchState();
+    }
+  }, [stateLoaded, fetchState]);
+
+  if (!stateLoaded) {
+    return null;
+  }
+
+  if (!aiEnabled) {
+    return <Navigate to={getDefaultRoute(false, functionMode)} replace />;
   }
 
   return <Outlet />;

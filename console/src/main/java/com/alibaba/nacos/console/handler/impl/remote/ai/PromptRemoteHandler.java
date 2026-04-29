@@ -29,10 +29,8 @@ import com.alibaba.nacos.api.model.Page;
 import com.alibaba.nacos.common.utils.JacksonUtils;
 import com.alibaba.nacos.console.handler.ai.EnabledAiHandler;
 import com.alibaba.nacos.console.handler.ai.PromptHandler;
-import com.alibaba.nacos.console.handler.impl.ConditionFunctionEnabled;
 import com.alibaba.nacos.console.handler.impl.remote.EnabledRemoteHandler;
 import com.alibaba.nacos.console.handler.impl.remote.NacosMaintainerClientHolder;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,7 +46,6 @@ import java.util.Map;
 @Service
 @EnabledRemoteHandler
 @EnabledAiHandler
-@Conditional(ConditionFunctionEnabled.ConditionAiEnabled.class)
 public class PromptRemoteHandler implements PromptHandler {
     
     private final NacosMaintainerClientHolder clientHolder;

@@ -34,11 +34,9 @@ import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.model.Page;
 import com.alibaba.nacos.console.handler.ai.EnabledAiHandler;
 import com.alibaba.nacos.console.handler.ai.AgentSpecHandler;
-import com.alibaba.nacos.console.handler.impl.ConditionFunctionEnabled;
 import com.alibaba.nacos.console.handler.impl.remote.EnabledRemoteHandler;
 import com.alibaba.nacos.console.handler.impl.remote.NacosMaintainerClientHolder;
 import com.alibaba.nacos.core.model.form.PageForm;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,7 +51,6 @@ import java.util.ArrayList;
 @Service
 @EnabledRemoteHandler
 @EnabledAiHandler
-@Conditional(ConditionFunctionEnabled.ConditionAiEnabled.class)
 public class AgentSpecRemoteHandler implements AgentSpecHandler {
     
     private final NacosMaintainerClientHolder clientHolder;

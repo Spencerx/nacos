@@ -30,10 +30,8 @@ import com.alibaba.nacos.api.model.Page;
 import com.alibaba.nacos.api.model.v2.ErrorCode;
 import com.alibaba.nacos.console.handler.ai.EnabledAiHandler;
 import com.alibaba.nacos.console.handler.ai.McpHandler;
-import com.alibaba.nacos.console.handler.impl.ConditionFunctionEnabled;
 import com.alibaba.nacos.console.handler.impl.remote.EnabledRemoteHandler;
 import com.alibaba.nacos.console.handler.impl.remote.NacosMaintainerClientHolder;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,7 +42,6 @@ import org.springframework.stereotype.Service;
 @Service
 @EnabledRemoteHandler
 @EnabledAiHandler
-@Conditional(ConditionFunctionEnabled.ConditionAiEnabled.class)
 public class McpRemoteHandler implements McpHandler {
     
     private final NacosMaintainerClientHolder clientHolder;

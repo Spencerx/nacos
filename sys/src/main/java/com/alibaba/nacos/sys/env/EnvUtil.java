@@ -63,7 +63,9 @@ public class EnvUtil {
     public static final String FUNCTION_MODE_CONFIG = "config";
     
     public static final String FUNCTION_MODE_NAMING = "naming";
-    
+
+    public static final String FUNCTION_MODE_SIMPLE = "simple";
+
     /**
      * The key of nacos home.
      */

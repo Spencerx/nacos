@@ -24,6 +24,7 @@ import com.alibaba.nacos.sys.filter.NacosPackageExcludeFilter;
 import java.util.Set;
 
 import static com.alibaba.nacos.sys.env.EnvUtil.FUNCTION_MODE_NAMING;
+import static com.alibaba.nacos.sys.env.EnvUtil.FUNCTION_MODE_SIMPLE;
 
 /**
  * Naming module enabled filter by spring packages scan.
@@ -44,6 +45,6 @@ public class NamingEnabledFilter implements NacosPackageExcludeFilter {
         if (StringUtils.isEmpty(functionMode)) {
             return false;
         }
-        return !FUNCTION_MODE_NAMING.equals(functionMode);
+        return !FUNCTION_MODE_NAMING.equals(functionMode) && !FUNCTION_MODE_SIMPLE.equals(functionMode);
     }
 }

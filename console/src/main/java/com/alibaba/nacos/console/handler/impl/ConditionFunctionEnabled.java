@@ -45,7 +45,15 @@ public class ConditionFunctionEnabled implements Condition {
             return true;
         }
         // configured function mode not empty and equals target function mode, means target function is enabled
-        return functionMode.equalsIgnoreCase(targetFunctionMode);
+        if (functionMode.equalsIgnoreCase(targetFunctionMode)) {
+            return true;
+        }
+        // simple mode enables both config and naming
+        if (EnvUtil.FUNCTION_MODE_SIMPLE.equalsIgnoreCase(functionMode)) {
+            return EnvUtil.FUNCTION_MODE_CONFIG.equalsIgnoreCase(targetFunctionMode)
+                    || EnvUtil.FUNCTION_MODE_NAMING.equalsIgnoreCase(targetFunctionMode);
+        }
+        return false;
     }
     
     public static class ConditionNamingEnabled extends ConditionFunctionEnabled {

@@ -54,4 +54,22 @@ class ConditionFunctionEnabledTest {
         ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "naming");
         assertTrue(new ConditionFunctionEnabled.ConditionNamingEnabled().matches(null, null));
     }
+
+    @Test
+    void matchesForSimpleModeEnablesConfig() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "simple");
+        assertTrue(new ConditionFunctionEnabled.ConditionConfigEnabled().matches(null, null));
+    }
+
+    @Test
+    void matchesForSimpleModeEnablesNaming() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "simple");
+        assertTrue(new ConditionFunctionEnabled.ConditionNamingEnabled().matches(null, null));
+    }
+
+    @Test
+    void matchesForSimpleModeNotEnableAi() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "simple");
+        assertFalse(new ConditionFunctionEnabled.ConditionAiEnabled().matches(null, null));
+    }
 }

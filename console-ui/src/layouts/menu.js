@@ -139,8 +139,10 @@ export default function(model) {
     result.push(configurationMenu);
   } else {
     result.push(configurationMenu, serviceDiscoveryMenu);
-    result.push(aiRegistryMenu);
-    result.push(pluginMenu);
+    if (model !== 'simple') {
+      result.push(aiRegistryMenu);
+      result.push(pluginMenu);
+    }
   }
   if (globalAdmin) {
     result.push(authorityControlMenu);

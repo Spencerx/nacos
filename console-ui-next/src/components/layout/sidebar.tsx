@@ -60,7 +60,7 @@ export function Sidebar() {
   const navigate = useNavigate();
   const { sidebarCollapsed, toggleSidebar } = useAppStore();
   const { globalAdmin } = useAuthStore();
-  const { version, startupMode, functionMode, copilotEnabled } = useServerStore();
+  const { version, startupMode, functionMode, copilotEnabled, aiEnabled } = useServerStore();
   const { currentNamespace, namespaceShowName } = useNamespaceStore();
   const [platformOpen, setPlatformOpen] = useState(false);
 
@@ -74,8 +74,8 @@ export function Sidebar() {
 
   const coreItems: NavItem[] = [];
 
-  // AI Registry - show when not in naming/config/microservice mode (i.e. default mode or ai mode)
-  if (functionMode !== 'naming' && functionMode !== 'config' && functionMode !== 'microservice') {
+  // AI Registry - show when AI is enabled and not in naming/config/microservice mode
+  if (aiEnabled && functionMode !== 'naming' && functionMode !== 'config' && functionMode !== 'microservice') {
     coreItems.push({
       key: 'ai',
       label: t('menu.aiRegistry'),

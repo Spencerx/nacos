@@ -28,7 +28,7 @@ SHELL := /usr/bin/env bash
 # Display help information with colored output
 # Parses comments with '##' and formats them nicely
 help: ## Show help information
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-34s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-48s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 # Maven command configuration
 # Prefer using system mvn, fall back to ./mvnw wrapper if mvn does not exist
@@ -50,7 +50,9 @@ AUTH_ARGS := -Dnacos.core.auth.server.identity.key=testKey \
 	install-and-run-bootstrap-config \
 	install-and-run-bootstrap-naming \
 	install-and-run-bootstrap-microservice \
-	install-and-run-bootstrap-ai
+	install-and-run-bootstrap-ai \
+	install-and-run-bootstrap-extension-ai-enabled \
+	install-and-run-bootstrap-extension-ai-disabled
 
 # Clean all build artifacts and generated files
 clean: ## Clean the project
@@ -93,3 +95,11 @@ install-and-run-bootstrap-microservice: build ## Build and run Nacos in microser
 install-and-run-bootstrap-ai: build ## Build and run Nacos in AI mode
 	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
   -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true -Dnacos.functionMode=ai"
+
+install-and-run-bootstrap-extension-ai-enabled: build ## Build and run Nacos with nacos.extension.ai.enabled=true
+	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
+  -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true -Dnacos.extension.ai.enabled=true"
+
+install-and-run-bootstrap-extension-ai-disabled: build ## Build and run Nacos with nacos.extension.ai.enabled=false
+	cd bootstrap && $(MVN) $(MAVEN_ARGS) spring-boot:run -Prelease-nacos -DskipTests \
+  -Dspring-boot.run.jvmArguments="$(JVM_BASE_ARGS) $(AUTH_ARGS) -Dnacos.standalone=true -Dnacos.extension.ai.enabled=false"

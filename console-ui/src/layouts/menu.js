@@ -129,7 +129,7 @@ const agentManagementMenu = {
   ],
 };
 
-export default function(model) {
+export default function(model, aiEnabled = true) {
   const { token = '{}' } = localStorage;
   const { globalAdmin } = isJsonString(token) ? JSON.parse(token) || {} : {};
   const result = [];
@@ -143,7 +143,9 @@ export default function(model) {
     result.push(aiRegistryMenu, pluginMenu);
   } else {
     result.push(configurationMenu, serviceDiscoveryMenu);
-    result.push(aiRegistryMenu);
+    if (aiEnabled) {
+      result.push(aiRegistryMenu);
+    }
     result.push(pluginMenu);
   }
   if (globalAdmin) {

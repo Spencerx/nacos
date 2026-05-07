@@ -137,12 +137,14 @@ export default function(model) {
     result.push(serviceDiscoveryMenu);
   } else if (model === 'config') {
     result.push(configurationMenu);
+  } else if (model === 'microservice') {
+    result.push(configurationMenu, serviceDiscoveryMenu);
+  } else if (model === 'ai') {
+    result.push(aiRegistryMenu, pluginMenu);
   } else {
     result.push(configurationMenu, serviceDiscoveryMenu);
-    if (model !== 'microservice') {
-      result.push(aiRegistryMenu);
-      result.push(pluginMenu);
-    }
+    result.push(aiRegistryMenu);
+    result.push(pluginMenu);
   }
   if (globalAdmin) {
     result.push(authorityControlMenu);

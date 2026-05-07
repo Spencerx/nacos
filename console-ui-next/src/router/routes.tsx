@@ -7,7 +7,7 @@ import { useServerStore } from '@/stores/server-store';
 function DefaultRedirect() {
   const { functionMode } = useServerStore();
   let target
-  if (!functionMode) {
+  if (!functionMode || functionMode === 'ai') {
     target = '/skill';
   } else if (functionMode === 'naming') {
     target = '/serviceManagement';

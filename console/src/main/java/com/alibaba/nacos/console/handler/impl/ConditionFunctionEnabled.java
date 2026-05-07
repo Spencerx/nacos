@@ -53,6 +53,11 @@ public class ConditionFunctionEnabled implements Condition {
             return EnvUtil.FUNCTION_MODE_CONFIG.equalsIgnoreCase(targetFunctionMode)
                     || EnvUtil.FUNCTION_MODE_NAMING.equalsIgnoreCase(targetFunctionMode);
         }
+        // ai mode depends on both config and naming
+        if (EnvUtil.FUNCTION_MODE_AI.equalsIgnoreCase(functionMode)) {
+            return EnvUtil.FUNCTION_MODE_CONFIG.equalsIgnoreCase(targetFunctionMode)
+                    || EnvUtil.FUNCTION_MODE_NAMING.equalsIgnoreCase(targetFunctionMode);
+        }
         return false;
     }
     
@@ -73,7 +78,7 @@ public class ConditionFunctionEnabled implements Condition {
     public static class ConditionAiEnabled extends ConditionFunctionEnabled {
         
         public ConditionAiEnabled() {
-            super("");
+            super(EnvUtil.FUNCTION_MODE_AI);
         }
     }
 }

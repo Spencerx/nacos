@@ -72,4 +72,22 @@ class ConditionFunctionEnabledTest {
         ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "microservice");
         assertFalse(new ConditionFunctionEnabled.ConditionAiEnabled().matches(null, null));
     }
+
+    @Test
+    void matchesForAiModeEnablesAi() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "ai");
+        assertTrue(new ConditionFunctionEnabled.ConditionAiEnabled().matches(null, null));
+    }
+
+    @Test
+    void matchesForAiModeEnablesConfig() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "ai");
+        assertTrue(new ConditionFunctionEnabled.ConditionConfigEnabled().matches(null, null));
+    }
+
+    @Test
+    void matchesForAiModeEnablesNaming() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "ai");
+        assertTrue(new ConditionFunctionEnabled.ConditionNamingEnabled().matches(null, null));
+    }
 }

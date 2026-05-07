@@ -66,6 +66,8 @@ public class EnvUtil {
 
     public static final String FUNCTION_MODE_MICROSERVICE = "microservice";
 
+    public static final String FUNCTION_MODE_AI = "ai";
+
     /**
      * The key of nacos home.
      */

@@ -165,6 +165,19 @@ class NacosCoreStartUpTest {
     }
 
     @Test
+    void initSystemPropertyFunctionModeAi() {
+        NacosCoreStartUp startUp = new NacosCoreStartUp();
+        try (MockedStatic<EnvUtil> envMock = mockStatic(EnvUtil.class);
+                MockedStatic<InetUtils> inetMock = mockStatic(InetUtils.class)) {
+            envMock.when(EnvUtil::getStandaloneMode).thenReturn(true);
+            envMock.when(EnvUtil::getFunctionMode).thenReturn(EnvUtil.FUNCTION_MODE_AI);
+            inetMock.when(InetUtils::getSelfIP).thenReturn("127.0.0.1");
+            startUp.initSystemProperty();
+            assertEquals(EnvUtil.FUNCTION_MODE_AI, System.getProperty("nacos.function.mode"));
+        }
+    }
+
+    @Test
     void customEnvironmentCallsEnvUtil() {
         NacosCoreStartUp startUp = new NacosCoreStartUp();
         try (MockedStatic<EnvUtil> envMock = mockStatic(EnvUtil.class)) {

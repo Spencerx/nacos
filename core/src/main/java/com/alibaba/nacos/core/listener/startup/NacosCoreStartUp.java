@@ -129,6 +129,8 @@ public class NacosCoreStartUp extends AbstractNacosStartUp {
             System.setProperty(MODE_PROPERTY_KEY_FUNCTION_MODE, EnvUtil.FUNCTION_MODE_NAMING);
         } else if (EnvUtil.FUNCTION_MODE_MICROSERVICE.equals(EnvUtil.getFunctionMode())) {
             System.setProperty(MODE_PROPERTY_KEY_FUNCTION_MODE, EnvUtil.FUNCTION_MODE_MICROSERVICE);
+        } else if (EnvUtil.FUNCTION_MODE_AI.equals(EnvUtil.getFunctionMode())) {
+            System.setProperty(MODE_PROPERTY_KEY_FUNCTION_MODE, EnvUtil.FUNCTION_MODE_AI);
         }
         
         System.setProperty(LOCAL_IP_PROPERTY_KEY, InetUtils.getSelfIP());

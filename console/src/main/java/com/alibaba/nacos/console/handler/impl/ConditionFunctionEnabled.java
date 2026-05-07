@@ -48,8 +48,8 @@ public class ConditionFunctionEnabled implements Condition {
         if (functionMode.equalsIgnoreCase(targetFunctionMode)) {
             return true;
         }
-        // simple mode enables both config and naming
-        if (EnvUtil.FUNCTION_MODE_SIMPLE.equalsIgnoreCase(functionMode)) {
+        // microservice mode enables both config and naming
+        if (EnvUtil.FUNCTION_MODE_MICROSERVICE.equalsIgnoreCase(functionMode)) {
             return EnvUtil.FUNCTION_MODE_CONFIG.equalsIgnoreCase(targetFunctionMode)
                     || EnvUtil.FUNCTION_MODE_NAMING.equalsIgnoreCase(targetFunctionMode);
         }

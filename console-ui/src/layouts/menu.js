@@ -139,7 +139,7 @@ export default function(model) {
     result.push(configurationMenu);
   } else {
     result.push(configurationMenu, serviceDiscoveryMenu);
-    if (model !== 'simple') {
+    if (model !== 'microservice') {
       result.push(aiRegistryMenu);
       result.push(pluginMenu);
     }

@@ -56,20 +56,20 @@ class ConditionFunctionEnabledTest {
     }
 
     @Test
-    void matchesForSimpleModeEnablesConfig() {
-        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "simple");
+    void matchesForMicroServiceModeEnablesConfig() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "microservice");
         assertTrue(new ConditionFunctionEnabled.ConditionConfigEnabled().matches(null, null));
     }
 
     @Test
-    void matchesForSimpleModeEnablesNaming() {
-        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "simple");
+    void matchesForMicroServiceModeEnablesNaming() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "microservice");
         assertTrue(new ConditionFunctionEnabled.ConditionNamingEnabled().matches(null, null));
     }
 
     @Test
-    void matchesForSimpleModeNotEnableAi() {
-        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "simple");
+    void matchesForMicroServiceModeNotEnableAi() {
+        ReflectionTestUtils.setField(EnvUtil.class, "functionModeType", "microservice");
         assertFalse(new ConditionFunctionEnabled.ConditionAiEnabled().matches(null, null));
     }
 }

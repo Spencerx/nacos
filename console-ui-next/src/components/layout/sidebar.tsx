@@ -75,7 +75,7 @@ export function Sidebar() {
   const coreItems: NavItem[] = [];
 
   // AI Registry - show in mixed mode (top priority)
-  if (functionMode !== 'naming' && functionMode !== 'config' && functionMode !== 'simple') {
+  if (functionMode !== 'naming' && functionMode !== 'config' && functionMode !== 'microservice') {
     coreItems.push({
       key: 'ai',
       label: t('menu.aiRegistry'),

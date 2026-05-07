@@ -152,15 +152,15 @@ class NacosCoreStartUpTest {
     }
 
     @Test
-    void initSystemPropertyFunctionModeSimple() {
+    void initSystemPropertyFunctionModeMicroService() {
         NacosCoreStartUp startUp = new NacosCoreStartUp();
         try (MockedStatic<EnvUtil> envMock = mockStatic(EnvUtil.class);
                 MockedStatic<InetUtils> inetMock = mockStatic(InetUtils.class)) {
             envMock.when(EnvUtil::getStandaloneMode).thenReturn(true);
-            envMock.when(EnvUtil::getFunctionMode).thenReturn(EnvUtil.FUNCTION_MODE_SIMPLE);
+            envMock.when(EnvUtil::getFunctionMode).thenReturn(EnvUtil.FUNCTION_MODE_MICROSERVICE);
             inetMock.when(InetUtils::getSelfIP).thenReturn("127.0.0.1");
             startUp.initSystemProperty();
-            assertEquals(EnvUtil.FUNCTION_MODE_SIMPLE, System.getProperty("nacos.function.mode"));
+            assertEquals(EnvUtil.FUNCTION_MODE_MICROSERVICE, System.getProperty("nacos.function.mode"));
         }
     }
 

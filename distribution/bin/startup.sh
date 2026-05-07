@@ -185,8 +185,8 @@ if [[ "${FUNCTION_MODE}" == "config" ]]; then
     JAVA_OPT="${JAVA_OPT} -Dnacos.functionMode=config"
 elif [[ "${FUNCTION_MODE}" == "naming" ]]; then
     JAVA_OPT="${JAVA_OPT} -Dnacos.functionMode=naming"
-elif [[ "${FUNCTION_MODE}" == "simple" ]]; then
-    JAVA_OPT="${JAVA_OPT} -Dnacos.functionMode=simple"
+elif [[ "${FUNCTION_MODE}" == "microservice" ]]; then
+    JAVA_OPT="${JAVA_OPT} -Dnacos.functionMode=microservice"
 fi
 
 JAVA_OPT="${JAVA_OPT} -Dnacos.member.list=${MEMBER_LIST}"

@@ -2,6 +2,20 @@ import { lazy, Suspense } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { AuthGuard, AdminGuard, GuestGuard } from './guards';
+import { useServerStore } from '@/stores/server-store';
+
+function DefaultRedirect() {
+  const { functionMode } = useServerStore();
+  let target
+  if (!functionMode) {
+    target = '/skill';
+  } else if (functionMode === 'naming') {
+    target = '/serviceManagement';
+  } else {
+    target = '/configurationManagement';
+  }
+  return <Navigate to={target} replace />;
+}
 
 // Loading component
 function PageLoading() {
@@ -57,7 +71,7 @@ export const routes: RouteObject[] = [
           // Default redirect
           {
             index: true,
-            element: <Navigate to="/skill" replace />,
+            element: <DefaultRedirect />,
           },
           
           // Welcome page

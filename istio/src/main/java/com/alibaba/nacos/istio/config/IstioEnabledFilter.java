@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 
 import static com.alibaba.nacos.sys.env.EnvUtil.FUNCTION_MODE_NAMING;
+import static com.alibaba.nacos.sys.env.EnvUtil.FUNCTION_MODE_MICROSERVICE;
 
 /**
  * Istio module enabled filter by spring packages scan.
@@ -64,6 +65,6 @@ public class IstioEnabledFilter implements NacosPackageExcludeFilter {
         if (StringUtils.isEmpty(functionMode)) {
             return false;
         }
-        return !FUNCTION_MODE_NAMING.equals(functionMode);
+        return !FUNCTION_MODE_NAMING.equals(functionMode) && !FUNCTION_MODE_MICROSERVICE.equals(functionMode);
     }
 }

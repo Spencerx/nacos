@@ -203,6 +203,8 @@ inner 请求的详细规则由
 
 ### 7.4 AI
 
+AI payload 语义由 [AI Registry 规范](../ai/ai-registry-spec.md)和各资源类型规范定义。
+
 | Request type | Response type | 动作 | 主要字段 | 契约 |
 | --- | --- | --- | --- | --- |
 | `QueryMcpServerRequest` | `QueryMcpServerResponse` | read | `namespace`, `mcpName`, `version` | 查询 MCP Server 详情。 |
@@ -218,6 +220,9 @@ Skill ZIP 下载和 AgentSpec 组装属于 Java SDK interface 能力，但当前
 实现使用 HTTP/config 组合，不对应专用 gRPC payload。
 
 ### 7.5 Lock
+
+Lock 领域语义由[分布式锁规范](../lock/lock-spec.md)定义。当前 gRPC 入口仍为实验性能力，
+可能随该领域一起变化。
 
 | Request type | Response type | 动作 | 主要字段 | 契约 |
 | --- | --- | --- | --- | --- |

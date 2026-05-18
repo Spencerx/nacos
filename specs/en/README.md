@@ -48,6 +48,10 @@ extension mechanisms, and cross-cutting security rules.
 
 - [Config Specs](config/README.md)
 - [Naming Specs](naming/README.md)
+- [AI Registry Specs](ai/README.md)
+- [Core Operations Spec](core/core-operations-spec.md)
+- [Console Spec](console/console-spec.md)
+- [Distributed Lock Spec](lock/lock-spec.md)
 
 ## Extension Model
 

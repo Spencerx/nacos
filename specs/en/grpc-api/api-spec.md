@@ -217,6 +217,9 @@ inner server-to-server rules are defined by the
 
 ### 7.4 AI
 
+AI payload semantics are defined by the
+[AI Registry Spec](../ai/ai-registry-spec.md) and each resource type spec.
+
 | Request type | Response type | Action | Main fields | Contract |
 | --- | --- | --- | --- | --- |
 | `QueryMcpServerRequest` | `QueryMcpServerResponse` | read | `namespace`, `mcpName`, `version` | Query MCP server detail. |
@@ -233,6 +236,10 @@ but current Java client implementation uses HTTP/config composition rather than 
 dedicated gRPC payload.
 
 ### 7.5 Lock
+
+Lock domain semantics are defined by the
+[Distributed Lock Spec](../lock/lock-spec.md). The current gRPC surface is
+experimental and may change with that domain.
 
 | Request type | Response type | Action | Main fields | Contract |
 | --- | --- | --- | --- | --- |

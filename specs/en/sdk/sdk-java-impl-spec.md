@@ -163,6 +163,8 @@ a compatibility surface.
 ### 5.3 AiService and A2aService
 
 `AiService` extends `A2aService`.
+Resource semantics are defined by the [AI Registry Spec](../ai/ai-registry-spec.md)
+and the individual AI resource type specs.
 
 | Capability | Methods | Contract |
 | --- | --- | --- |
@@ -183,6 +185,9 @@ interface. The public interface contract should stay independent from transport
 details.
 
 ### 5.4 LockService
+
+`LockService` is an experimental runtime primitive. Its domain semantics are
+defined by the [Distributed Lock Spec](../lock/lock-spec.md).
 
 | Capability | Methods | Contract |
 | --- | --- | --- |

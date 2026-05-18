@@ -146,6 +146,7 @@ context，而不是修改请求 payload 或让无关 SDK 调用失败。默认 N
 ### 5.3 AiService 和 A2aService
 
 `AiService` 继承 `A2aService`。
+资源语义由 [AI Registry 规范](../ai/ai-registry-spec.md)和各 AI 资源类型规范定义。
 
 | 能力 | 方法 | 契约 |
 | --- | --- | --- |
@@ -165,6 +166,8 @@ context，而不是修改请求 payload 或让无关 SDK 调用失败。默认 N
 interface 契约应独立于具体传输方式保持稳定。
 
 ### 5.4 LockService
+
+`LockService` 是实验性运行时原语，其领域语义由[分布式锁规范](../lock/lock-spec.md)定义。
 
 | 能力 | 方法 | 契约 |
 | --- | --- | --- |

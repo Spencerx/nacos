@@ -23,6 +23,19 @@ extension mechanisms, and cross-cutting security rules.
 
 - [Nacos Design Spec](design/nacos-design-spec.md)
 - [Resource Model Spec](design/resource-model-spec.md)
+- [Foundation Capabilities Spec](design/foundation-capabilities-spec.md)
+- [Server Lifecycle And Environment Configuration Spec](design/foundation-server-lifecycle-env-spec.md)
+- [Cluster Membership Spec](design/foundation-cluster-membership-spec.md)
+- [Remote Connection Lifecycle Spec](design/foundation-remote-connection-spec.md)
+- [Request Filtering And Runtime Context Spec](design/foundation-request-context-spec.md)
+- [Internal RPC And Cluster Request Spec](design/foundation-internal-rpc-spec.md)
+- [AP Consistency Spec](design/foundation-ap-consistency-spec.md)
+- [CP Consistency Spec](design/foundation-cp-consistency-spec.md)
+- [Persistence And Dump Spec](design/foundation-persistence-dump-spec.md)
+- [Task Execution Spec](design/foundation-task-execution-spec.md)
+- [Event Dispatch And NotifyCenter Spec](design/foundation-event-dispatch-spec.md)
+- [Observability Hooks Spec](design/foundation-observability-hooks-spec.md)
+- [Core Capabilities Spec](design/core-capabilities-spec.md)
 
 ## Interface Model
 
@@ -30,6 +43,11 @@ extension mechanisms, and cross-cutting security rules.
 - [gRPC API Spec](grpc-api/api-spec.md)
 - [SDK Spec](sdk/sdk-spec.md)
 - [Java SDK Implementation Spec](sdk/sdk-java-impl-spec.md)
+
+## Domain Model
+
+- [Config Specs](config/README.md)
+- [Naming Specs](naming/README.md)
 
 ## Extension Model
 

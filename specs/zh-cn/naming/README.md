@@ -23,8 +23,9 @@
 [远程连接生命周期规范](../design/foundation-remote-connection-spec.md)、
 [内部 RPC 与集群请求规范](../design/foundation-internal-rpc-spec.md)、
 [AP 一致性规范](../design/foundation-ap-consistency-spec.md)、
-[CP 一致性规范](../design/foundation-cp-consistency-spec.md)，以及已有 HTTP、gRPC、SDK、
-鉴权和插件规范，进一步定义服务发现领域。
+[CP 一致性规范](../design/foundation-cp-consistency-spec.md)、
+[客户端运行时规范](../client/README.md)，以及已有 HTTP、gRPC、SDK、鉴权和插件规范，
+进一步定义服务发现领域。
 
 ## 规范结构
 
@@ -50,6 +51,10 @@
   持久服务在注册、心跳、注销、批量注册和清理上的规则。
 - [Naming 一致性与客户端状态规范](naming-consistency-client-spec.md)：通用 client state，以及
   临时服务 AP 状态、持久服务 CP 状态、索引和 snapshot。
+- [Naming 临时服务 Distro 一致性规范](naming-ephemeral-distro-consistency-spec.md)：临时
+  client ownership、Distro 同步、verify、anti-entropy、清理和最终可见性。
+- [Naming 持久服务 CP 一致性规范](naming-persistent-cp-consistency-spec.md)：持久实例 CP 写入、
+  metadata group、snapshot、恢复和可见性边界。
 
 ## 实现来源
 

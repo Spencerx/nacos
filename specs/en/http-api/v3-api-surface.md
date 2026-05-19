@@ -35,7 +35,8 @@ v3 prefixes after the Nacos web context path:
 
 This document does not cover:
 
-- v1/v2 compatibility APIs;
+- v1/v2 compatibility APIs, which are externalized to
+  [nacos-api-legacy-adapter](https://github.com/nacos-group/nacos-api-legacy-adapter);
 - gRPC request and response contracts;
 - internal cluster APIs that are not exposed as v3 HTTP controllers;
 - the AI Registry adaptor API, which has a separate compatibility surface.
@@ -209,4 +210,5 @@ deprecated compatibility APIs:
 Compatibility endpoints may remain available for a transition period, but the
 user-facing documentation should describe the new APIs as the primary contract.
 Deprecated endpoints should be documented only in compatibility sections with
-migration guidance.
+migration guidance, following the
+[Compatibility And Deprecation Spec](../design/compatibility-deprecation-spec.md).

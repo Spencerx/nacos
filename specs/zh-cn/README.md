@@ -22,6 +22,7 @@
 
 - [Nacos 设计规范](design/nacos-design-spec.md)
 - [资源模型规范](design/resource-model-spec.md)
+- [兼容与废弃策略规范](design/compatibility-deprecation-spec.md)
 - [基础能力规范](design/foundation-capabilities-spec.md)
 - [服务端生命周期与环境配置规范](design/foundation-server-lifecycle-env-spec.md)
 - [集群成员规范](design/foundation-cluster-membership-spec.md)
@@ -42,6 +43,7 @@
 - [gRPC API 规范](grpc-api/api-spec.md)
 - [SDK 规范](sdk/sdk-spec.md)
 - [Java SDK 实现规范](sdk/sdk-java-impl-spec.md)
+- [客户端运行时规范](client/README.md)
 
 ## 领域模型
 
@@ -54,6 +56,7 @@
 
 ## 扩展模型
 
+- [集成规范](integration/README.md)
 - [插件规范](plugin/README.md)
 
 ## 安全模型

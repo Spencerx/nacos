@@ -66,6 +66,8 @@ The following compatibility guarantees are not provided yet:
 
 Applications that require strong production-grade lock guarantees should verify
 the current behavior against their failure model before relying on this module.
+Experimental compatibility expectations follow the
+[Compatibility And Deprecation Spec](../design/compatibility-deprecation-spec.md).
 
 ## 3. Resource Model
 
@@ -148,7 +150,9 @@ the same way as Config or Naming domain data.
 Distributed Lock is exposed to clients through the runtime SDK, not as a broad
 administrative API. The Java client uses the gRPC request path described by the
 [gRPC API Spec](../grpc-api/api-spec.md). The client must check the
-`SERVER_DISTRIBUTED_LOCK` ability before sending lock operations to a server.
+`SERVER_DISTRIBUTED_LOCK` ability before sending lock operations to a server,
+following the
+[Client Ability Negotiation Spec](../client/client-ability-negotiation-spec.md).
 
 The public SDK boundary is:
 

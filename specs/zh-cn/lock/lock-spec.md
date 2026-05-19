@@ -43,6 +43,7 @@
 ## 2. 实验状态
 
 在社区明确将分布式锁提升为稳定能力之前，`lock` 模块必须被视为实验性功能。
+实验能力的兼容预期遵循[兼容与废弃策略规范](../design/compatibility-deprecation-spec.md)。
 
 当前尚不承诺以下兼容性：
 
@@ -125,7 +126,8 @@ Naming 领域数据那样受[持久化与 Dump 规范](../design/foundation-pers
 
 分布式锁通过运行时 SDK 暴露给客户端，而不是作为大范围管理 API 暴露。Java 客户端使用
 [gRPC API 规范](../grpc-api/api-spec.md)定义的 gRPC 请求路径。客户端必须在发送锁操作前检查
-服务端是否支持 `SERVER_DISTRIBUTED_LOCK` ability。
+服务端是否支持 `SERVER_DISTRIBUTED_LOCK` ability，并遵循
+[客户端能力协商规范](../client/client-ability-negotiation-spec.md)。
 
 公开 SDK 边界为：
 

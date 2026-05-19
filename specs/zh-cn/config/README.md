@@ -32,6 +32,7 @@
 ## 运维与存储
 
 - [Config 持久化、Dump 与历史规范](config-persistence-history-spec.md)
+- [Config 一致性、Dump 与可见性规范](config-consistency-dump-visibility-spec.md)
 - [Config 容量与运维规范](config-capacity-ops-spec.md)
 
 ## 相关规范
@@ -40,6 +41,7 @@
 - [基础能力规范](../design/foundation-capabilities-spec.md)
 - [集群成员规范](../design/foundation-cluster-membership-spec.md)
 - [远程连接生命周期规范](../design/foundation-remote-connection-spec.md)
+- [客户端运行时规范](../client/README.md)
 - [内部 RPC 与集群请求规范](../design/foundation-internal-rpc-spec.md)
 - [AP 一致性规范](../design/foundation-ap-consistency-spec.md)
 - [CP 一致性规范](../design/foundation-cp-consistency-spec.md)

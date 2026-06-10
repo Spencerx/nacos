@@ -56,6 +56,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -404,7 +405,7 @@ public class ConsoleConfigControllerTest {
                 eq(requestIpApp)))
             .thenReturn(expectedResult);
         
-        MockHttpServletRequestBuilder builder =
+        MockMultipartHttpServletRequestBuilder builder =
             MockMvcRequestBuilders.multipart("/v3/console/cs/config/import")
                 .file(mockFile).param("srcUser", "").param("namespaceId", namespaceId)
                 .param("policy", policy.toString()).header("X-Real-IP", srcIp)

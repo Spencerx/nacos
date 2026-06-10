@@ -38,7 +38,6 @@ import com.alibaba.nacos.plugin.auth.impl.token.TokenManagerDelegate;
 import com.alibaba.nacos.plugin.auth.impl.users.NacosUser;
 import com.alibaba.nacos.plugin.auth.impl.users.NacosUserService;
 import com.alibaba.nacos.sys.env.EnvUtil;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,10 +59,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.alibaba.nacos.api.common.Constants.ACCESS_TOKEN;
+import static com.alibaba.nacos.api.common.Constants.GLOBAL_ADMIN;
+import static com.alibaba.nacos.api.common.Constants.TOKEN_TTL;
+import static com.alibaba.nacos.api.common.Constants.USERNAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -441,15 +445,18 @@ class UserControllerV3Test {
         MockHttpServletResponse response = new MockHttpServletResponse();
         Object actual = userControllerV3.login(response, request);
         
-        assertTrue(actual instanceof ObjectNode);
+        assertInstanceOf(Map.class, actual);
         
-        String actualString = actual.toString();
+        Map<?, ?> map = (Map<?, ?>) actual;
+        assertTrue(map.containsKey(ACCESS_TOKEN));
+        assertTrue(map.containsKey(TOKEN_TTL));
+        assertTrue(map.containsKey(GLOBAL_ADMIN));
+        assertEquals(user.getToken(), map.get(ACCESS_TOKEN));
+        assertEquals(18000L, map.get(TOKEN_TTL));
+        assertEquals(true, map.get(GLOBAL_ADMIN));
+        assertEquals(user.getUserName(), map.get(USERNAME));
         
-        assertTrue(actualString.contains("\"accessToken\":\"1234567890\""));
-        assertTrue(actualString.contains("\"tokenTtl\":18000"));
-        assertTrue(actualString.contains("\"globalAdmin\":true"));
-        
-        assertEquals(AuthConstants.TOKEN_PREFIX + "1234567890",
+        assertEquals(AuthConstants.TOKEN_PREFIX + user.getToken(),
             response.getHeader(AuthConstants.AUTHORIZATION_HEADER));
     }
     
@@ -467,10 +474,10 @@ class UserControllerV3Test {
         
         Object actual = userControllerV3.login(response, request);
         
-        assertTrue(actual instanceof ObjectNode);
+        assertTrue(actual instanceof Map<?, ?>);
         String actualString = actual.toString();
-        assertTrue(actualString.contains("\"accessToken\":\"ldap-token\""));
-        assertTrue(actualString.contains("\"globalAdmin\":false"));
+        assertTrue(actualString.contains("accessToken=ldap-token"));
+        assertTrue(actualString.contains("globalAdmin=false"));
         assertEquals(AuthConstants.TOKEN_PREFIX + "ldap-token",
             response.getHeader(AuthConstants.AUTHORIZATION_HEADER));
     }

@@ -38,9 +38,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -58,23 +58,22 @@ import static org.mockito.Mockito.times;
 @ExtendWith(SpringExtension.class)
 class DumpServiceTest {
     
-    @Mock
+    @MockitoBean
     DefaultHistoryConfigCleaner defaultHistoryConfigCleaner = new DefaultHistoryConfigCleaner();
     
-    @Mock
+    @MockitoBean
     ConfigInfoPersistService configInfoPersistService;
     
-    @Mock
-    
+    @MockitoBean
     NamespacePersistService namespacePersistService;
     
-    @Mock
+    @MockitoBean
     HistoryConfigInfoPersistService historyConfigInfoPersistService;
     
-    @Mock
+    @MockitoBean
     ConfigInfoGrayPersistService configInfoGrayPersistService;
     
-    @Mock
+    @MockitoBean
     ServerMemberManager memberManager;
     
     MockedStatic<EnvUtil> envUtilMockedStatic;
@@ -85,12 +84,12 @@ class DumpServiceTest {
     
     MockedStatic<HistoryConfigCleanerManager> historyConfigCleanerManagerMockedStatic;
     
-    @Mock
+    @MockitoBean
     private DataSourceService dataSourceService;
     
     private DumpService dumpService;
     
-    @Mock
+    @MockitoBean
     private TaskManager dumpTaskMgr;
     
     @BeforeEach

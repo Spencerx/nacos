@@ -21,7 +21,7 @@ adapter work discussed in issue #14466 and defined by
 `specs/en/sdk/sdk-java-json-adapter-spec.md` /
 `specs/zh-cn/sdk/sdk-java-json-adapter-spec.md`.
 
-Last updated: 2026-06-16.
+Last updated: 2026-06-24.
 
 ## Status Legend
 
@@ -92,6 +92,50 @@ Last updated: 2026-06-16.
     returns no matches.
   - `mvn -pl client apache-rat:check`
   - `mvn apache-rat:check -DskipTests`
+- 2026-06-17, stage 8 maintainer-client HTTP response JSON cleanup:
+  - `mvn -pl maintainer-client spotless:apply`
+  - `mvn -pl maintainer-client spotless:check`
+  - `mvn -pl maintainer-client -am -DskipTests compile`
+  - `mvn -pl maintainer-client -am -Dtest=NacosMaintainerFactoryTest,DefaultServerListManagerTest,A2aMaintainerServiceDefaultMethodsTest,A2aMaintainerServiceImplTest,AgentSpecMaintainerServiceDefaultMethodsTest,AgentSpecMaintainerServiceImplTest,AiMaintainerFactoryTest,AiMaintainerServiceDefaultMethodsTest,NacosAiMaintainerServiceImplTest,PipelineMaintainerServiceImplTest,PromptMaintainerServiceDefaultMethodsTest,PromptMaintainerServiceImplTest,SkillMaintainerServiceDefaultMethodsTest,SkillMaintainerServiceImplTest,ConfigMaintainerFactoryTest,NacosConfigMaintainerServiceImplTest,AbstractCoreMaintainerServiceTest,HttpRequestTest,NacosNamingMaintainerServiceImplTest,NamingMaintainerFactoryTest,ClientHttpProxyTest,HttpClientManagerTest,ParamUtilTest -Dsurefire.failIfNoSpecifiedTests=false clean test`
+  - `maintainer-client/target/site/jacoco/jacoco.xml`: changed response
+    parsing lines in non-Pipeline maintainer-client implementations have
+    covered instructions.
+  - `rg "com\\.fasterxml\\.jackson\\.core\\.type\\.TypeReference|new TypeReference|JacksonUtils\\.toObj" maintainer-client/src/main/java -g '*.java'`
+    returns only the legacy `PipelineMaintainerServiceImpl` `JsonNode`
+    compatibility path.
+  - `mvn -pl maintainer-client apache-rat:check`
+- 2026-06-18, stage 8 maintainer-client CI IT follow-up:
+  - Fixed config maintainer boolean `Result` unwrapping so business failure
+    responses keep the original message instead of becoming a null
+    `Boolean` unboxing failure.
+  - `mvn -pl maintainer-client spotless:apply`
+  - `mvn -pl maintainer-client spotless:check`
+  - `mvn -pl maintainer-client -am -Dtest=NacosConfigMaintainerServiceImplTest -Dsurefire.failIfNoSpecifiedTests=false test`
+  - `mvn -pl maintainer-client -am test` passed when local test HTTP server
+    binding was allowed; the sandboxed attempt failed only on local bind
+    permission in OIDC dependency tests.
+  - `maintainer-client/target/site/jacoco/jacoco.xml`: new config maintainer
+    boolean unwrap lines have no missed instructions.
+- 2026-06-24, stage 8 Copilot OpenAPI IT follow-up:
+  - Treated idempotent Copilot config publish as successful when publish
+    returns `false` but the stored config content already matches the target
+    content.
+  - Fixed Copilot config maintainer-client initialization to pass the current
+    Nacos context path so internal config admin requests target the same
+    `/nacos` context path used by OpenAPI IT.
+  - Treated publish exceptions as idempotent success when the stored config
+    content already matches the target content.
+  - Switched the Copilot console configuration API to reuse the existing
+    console `ConfigProxy` read/write path so standalone OpenAPI IT uses the
+    inner config handler and remote mode keeps the normal maintainer-client
+    holder configuration.
+  - `mvn -pl copilot -Dtest=CopilotConfigStorageTest test`
+  - `mvn -pl copilot spotless:apply`
+  - `mvn -pl copilot spotless:check`
+  - `mvn -pl copilot test`
+  - `mvn -pl console -am -Dtest=ConsoleCopilotConfigControllerTest -Dsurefire.failIfNoSpecifiedTests=false test`
+  - `mvn -pl console spotless:apply`
+  - `mvn -pl console spotless:check`
 
 ## Implementation Principles
 
@@ -304,7 +348,7 @@ Last updated: 2026-06-16.
     - Naming HTTP proxy tests.
     - AI HTTP proxy tests.
 
-- `[ ]` Migrate maintainer-client HTTP response parsing.
+- `[x]` Migrate maintainer-client HTTP response parsing.
   - Files:
     - `maintainer-client/src/main/java/com/alibaba/nacos/maintainer/client/remote/ClientHttpProxy.java`
     - `maintainer-client/src/main/java/com/alibaba/nacos/maintainer/client/naming/NacosNamingMaintainerServiceImpl.java`
@@ -317,6 +361,8 @@ Last updated: 2026-06-16.
     - Leave legacy `Pipeline JsonNode` methods until typed DTO APIs are added.
   - Validation:
     - Maintainer-client unit tests.
+    - Changed response parsing lines have no missed JaCoCo instructions in the
+      focused stage 8 test run.
 
 - `[ ]` Migrate subtype preload paths.
   - Files:

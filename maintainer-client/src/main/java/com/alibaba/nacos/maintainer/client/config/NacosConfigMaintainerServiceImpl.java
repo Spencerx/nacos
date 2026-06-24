@@ -26,7 +26,10 @@ import com.alibaba.nacos.api.config.model.ConfigListenerInfo;
 import com.alibaba.nacos.api.config.model.SameConfigPolicy;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.alibaba.nacos.api.model.Page;
+import com.alibaba.nacos.api.model.v2.ErrorCode;
 import com.alibaba.nacos.api.model.v2.Result;
+import com.alibaba.nacos.api.utils.json.JsonUtils;
+import com.alibaba.nacos.api.utils.json.NacosTypeReference;
 import com.alibaba.nacos.common.http.HttpRestResult;
 import com.alibaba.nacos.common.utils.HttpMethod;
 import com.alibaba.nacos.common.utils.JacksonUtils;
@@ -35,7 +38,6 @@ import com.alibaba.nacos.maintainer.client.constants.Constants;
 import com.alibaba.nacos.maintainer.client.core.AbstractCoreMaintainerService;
 import com.alibaba.nacos.maintainer.client.model.HttpRequest;
 import com.alibaba.nacos.plugin.auth.api.RequestResource;
-import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,8 +69,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .setPath(Constants.AdminApiPath.CONFIG_ADMIN_PATH).setParamValue(params).build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<ConfigDetailInfo> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<ConfigDetailInfo>>() {
+        Result<ConfigDetailInfo> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<ConfigDetailInfo>>() {
             });
         return result.getData();
     }
@@ -99,9 +101,9 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<Boolean> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<Boolean>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<Boolean>>() {
             });
-        return result.getData();
+        return unwrapBooleanResult(result);
     }
     
     @Override
@@ -144,9 +146,9 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<Boolean> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<Boolean>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<Boolean>>() {
             });
-        return result.getData();
+        return unwrapBooleanResult(result);
     }
     
     @Override
@@ -163,9 +165,9 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<Boolean> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<Boolean>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<Boolean>>() {
             });
-        return result.getData();
+        return unwrapBooleanResult(result);
     }
     
     @Override
@@ -185,9 +187,9 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<Boolean> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<Boolean>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<Boolean>>() {
             });
-        return result.getData();
+        return unwrapBooleanResult(result);
     }
     
     @Override
@@ -213,8 +215,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<Page<ConfigBasicInfo>> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<Page<ConfigBasicInfo>>>() {
+        Result<Page<ConfigBasicInfo>> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<Page<ConfigBasicInfo>>>() {
             });
         return result.getData();
     }
@@ -234,8 +236,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<ConfigListenerInfo> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<ConfigListenerInfo>>() {
+        Result<ConfigListenerInfo> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<ConfigListenerInfo>>() {
             });
         return result.getData();
     }
@@ -255,9 +257,9 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<Boolean> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<Boolean>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<Boolean>>() {
             });
-        return result.getData();
+        return unwrapBooleanResult(result);
     }
     
     @Override
@@ -273,9 +275,25 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<ConfigGrayInfo> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<ConfigGrayInfo>>() {
+        Result<ConfigGrayInfo> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<ConfigGrayInfo>>() {
             });
+        return result.getData();
+    }
+    
+    private static boolean unwrapBooleanResult(Result<Boolean> result) throws NacosException {
+        if (result == null) {
+            throw new NacosException(NacosException.SERVER_ERROR, "empty Result");
+        }
+        if (!ErrorCode.SUCCESS.getCode().equals(result.getCode())) {
+            String message =
+                StringUtils.isNotBlank(result.getMessage()) ? result.getMessage()
+                    : "request failed";
+            throw new NacosException(NacosException.SERVER_ERROR, message);
+        }
+        if (result.getData() == null) {
+            throw new NacosException(NacosException.SERVER_ERROR, "empty boolean result data");
+        }
         return result.getData();
     }
     
@@ -294,8 +312,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .setBody(JacksonUtils.toJson(cloneInfos)).build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<Map<String, Object>> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<Map<String, Object>>>() {
+        Result<Map<String, Object>> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<Map<String, Object>>>() {
             });
         return result.getData();
     }
@@ -316,8 +334,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .setParamValue(params).build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<Page<ConfigHistoryBasicInfo>> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<Page<ConfigHistoryBasicInfo>>>() {
+        Result<Page<ConfigHistoryBasicInfo>> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<Page<ConfigHistoryBasicInfo>>>() {
             });
         return result.getData();
     }
@@ -337,8 +355,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<ConfigHistoryDetailInfo> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<ConfigHistoryDetailInfo>>() {
+        Result<ConfigHistoryDetailInfo> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<ConfigHistoryDetailInfo>>() {
             });
         return result.getData();
     }
@@ -358,8 +376,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .setParamValue(params).build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<ConfigHistoryDetailInfo> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<ConfigHistoryDetailInfo>>() {
+        Result<ConfigHistoryDetailInfo> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<ConfigHistoryDetailInfo>>() {
             });
         return result.getData();
     }
@@ -376,8 +394,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .setParamValue(params).build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<List<ConfigBasicInfo>> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<List<ConfigBasicInfo>>>() {
+        Result<List<ConfigBasicInfo>> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<List<ConfigBasicInfo>>>() {
             });
         return result.getData();
     }
@@ -389,7 +407,7 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<String> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<String>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<String>>() {
             });
         return result.getData();
     }
@@ -406,7 +424,7 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
         Result<String> result =
-            JacksonUtils.toObj(httpRestResult.getData(), new TypeReference<Result<String>>() {
+            JsonUtils.toObj(httpRestResult.getData(), new NacosTypeReference<Result<String>>() {
             });
         return result.getData();
     }
@@ -427,8 +445,8 @@ public class NacosConfigMaintainerServiceImpl extends AbstractCoreMaintainerServ
             .build();
         HttpRestResult<String> httpRestResult =
             getClientHttpProxy().executeSyncHttpRequest(httpRequest);
-        Result<ConfigListenerInfo> result = JacksonUtils.toObj(httpRestResult.getData(),
-            new TypeReference<Result<ConfigListenerInfo>>() {
+        Result<ConfigListenerInfo> result = JsonUtils.toObj(httpRestResult.getData(),
+            new NacosTypeReference<Result<ConfigListenerInfo>>() {
             });
         return result.getData();
     }

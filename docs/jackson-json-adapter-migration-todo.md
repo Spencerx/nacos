@@ -218,6 +218,32 @@ Last updated: 2026-06-25.
   - `mvn -pl common,client,maintainer-client spotless:apply`
   - `mvn -pl common,client,maintainer-client spotless:check`
   - `mvn -pl common,client,maintainer-client apache-rat:check`
+- 2026-06-25, stage 13 Jackson 3 SDK IT workflow:
+  - Added a `jackson3-sdk-test` profile to `test/java-sdk-test` and
+    `test/maintainer-sdk-test`.
+  - The profile keeps the current `nacos-client` and `nacos-maintainer-client`
+    dependencies, adds Jackson 3 core/databind, and explicitly runs the SDK ITs
+    with `nacos.client.json.adapter=jackson3`.
+  - Added GitHub Actions IT steps that rerun the existing Java SDK and
+    maintainer SDK IT cases with Jackson 2 and Jackson 3 coexisting on the
+    classpath.
+  - `mvn -pl test/java-sdk-test -Pjava-sdk-integration-test,jackson3-sdk-test -DskipTests test-compile`
+  - `mvn -pl test/maintainer-sdk-test -Pmaintainer-sdk-integration-test,jackson3-sdk-test -DskipTests test-compile`
+  - `mvn -pl test/java-sdk-test -Pjackson3-sdk-test dependency:tree -Dincludes=com.fasterxml.jackson.core,tools.jackson.core`
+    shows Jackson 2 core/databind from `nacos-client` and Jackson 3
+    core/databind from the profile.
+  - `mvn -pl test/maintainer-sdk-test -Pjackson3-sdk-test dependency:tree -Dincludes=com.fasterxml.jackson.core,tools.jackson.core`
+    shows Jackson 2 core/databind from `nacos-common` and Jackson 3
+    core/databind from the profile.
+- 2026-06-25, stage 13 Jackson 3 SDK IT CI follow-up:
+  - Switched the Jackson 3 adapter mapper to Jackson 2 compatible defaults so
+    Nacos final-field DTOs such as `Result<T>` keep their previous
+    deserialization behavior.
+  - Added Jackson 3 regression coverage for `Result<Boolean>` through
+    `NacosTypeReference` and for final-field DTOs without setters.
+  - `mvn -pl common -Dtest=Jackson3JsonAdapterTest test`
+  - `mvn -pl test/java-sdk-test -Pjava-sdk-integration-test,jackson3-sdk-test -DskipTests test-compile`
+  - `mvn -pl test/maintainer-sdk-test -Pmaintainer-sdk-integration-test,jackson3-sdk-test -DskipTests test-compile`
 
 ## Implementation Principles
 
@@ -543,6 +569,28 @@ Last updated: 2026-06-25.
     - Prefer focused module tests first; add an integration sample if the module
       test classpath cannot represent the matrix.
 
+- `[x]` Add Jackson 3 SDK IT workflow and profile.
+  - Files:
+    - `.github/workflows/*`
+    - `test/java-sdk-test`
+    - `test/maintainer-sdk-test`
+  - Plan:
+    - Keep the existing `nacos-client` and `nacos-maintainer-client` IT modules
+      unchanged as the Jackson 2 compatibility baseline.
+    - Add a Jackson 3 profile to the existing Java SDK and maintainer SDK IT
+      modules so the same IT cases run with Jackson 2 and Jackson 3 coexisting.
+    - Explicitly select the Jackson 3 adapter in that profile to verify the
+      Jackson 3 runtime path under the same SDK scenarios.
+    - Add dedicated GitHub Actions steps that rerun both existing SDK IT modules
+      with the Jackson 3 profile.
+  - Validation:
+    - Existing `test/java-sdk-test` IT still passes with the current Jackson 2
+      baseline.
+    - Existing `test/maintainer-sdk-test` IT still passes with the current
+      Jackson 2 baseline.
+    - Existing Java SDK and maintainer SDK IT modules also pass with Jackson 3
+      added and selected while Jackson 2 remains present.
+
 ### 7. Final Cleanup
 
 - `[x]` Run a final scan for forbidden public Jackson core/databind exposure.
@@ -576,6 +624,8 @@ Last updated: 2026-06-25.
 6. Client and maintainer-client `TypeReference` migration.
 7. Pipeline DTO exposure and typed maintainer-client APIs.
 8. Dependency matrix tests and final forbidden-exposure scan.
+9. Jackson 3 SDK IT module and workflow based on the existing Java SDK and
+   maintainer SDK IT cases.
 
 ## Issue Comment Draft
 
